@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Lint as: python2, python3
 """Tests for google_research.attribution.integrated_gradients."""
 
 from __future__ import absolute_import
@@ -28,11 +29,12 @@ class AttributionTest(tf.test.TestCase):
 
   def testAddIntegratedGradientsOps(self):
     with tf.Graph().as_default() as graph:
-      var1 = tf.get_variable(name='var1', initializer=[[[1., 2., 3.]]])
+      var1 = tf.compat.v1.get_variable(
+          name='var1', initializer=[[[1., 2., 3.]]])
       input_tensor = tf.placeholder(shape=[None, None, 3], dtype=tf.float32)
       x = tf.multiply(input_tensor, [[[1.]]])
       var1_times_x = tf.multiply(var1, x)
-      var2 = tf.get_variable(
+      var2 = tf.compat.v1.get_variable(
           name='var2', initializer=[[4., 5.], [6., 7.], [4., 3.]])
       matmul = tf.einsum('ijk,kl->ijl', var1_times_x, var2)
       output_tensor = tf.reduce_sum(matmul, [1, 2], name='out')
